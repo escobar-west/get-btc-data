@@ -13,14 +13,17 @@ import requests
 from requests.exceptions import ConnectionError
 
 
-conn = sqlite3.connect('cryptocurrencies.db', detect_types=sqlite3.PARSE_DECLTYPES)
+conn = sqlite3.connect('cryptocurrencies.db')
 c = conn.cursor()
 
 if False: # Don't run this statement unless you want to delete the table    
     c.execute('DROP TABLE XXBTZUSD')
     c.execute('''CREATE TABLE XXBTZUSD
                   (date INT PRIMARY KEY,
-                  price REAL,
+                  open REAL,
+                  high REAL,
+                  low REAL,
+                  close REAL,
                   volume REAL)''')
 
 url = 'https://api.kraken.com/0/public/OHLC?pair=XXBTZUSD'
@@ -30,12 +33,12 @@ while(1):
         raw_data = requests.get(url)
         
         result = raw_data.json()['result']['XXBTZUSD'][:-1]
-        result_iter = ((row[0],row[4],row[6]) for row in result)
+        result_iter = ((row[0],row[1],row[2],row[3],row[4],row[6]) for row in result)
         
-        c.executemany('INSERT OR IGNORE INTO XXBTZUSD VALUES (?,?,?)', result_iter)
+        c.executemany('INSERT OR IGNORE INTO XXBTZUSD VALUES (?,?,?,?,?,?)', result_iter)
         conn.commit()
         
-        print('{}: committed new entries. Now sleeping...'
+        print('{}: committed new entries. Now sleeping for an hour...'
               .format(datetime.datetime.fromtimestamp(time.time())))
         time.sleep(3600)
     except ConnectionError:
