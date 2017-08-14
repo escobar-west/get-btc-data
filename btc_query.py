@@ -17,7 +17,7 @@ conn = sqlite3.connect('cryptocurrencies.db')
 c = conn.cursor()
 
 if False: # Don't run this statement unless you want to delete the table    
-    c.execute('DROP TABLE XXBTZUSD')
+    c.execute('DROP TABLE BTCUSD')
     c.execute('''CREATE TABLE XXBTZUSD
                   (date INT PRIMARY KEY,
                   open REAL,
