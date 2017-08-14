@@ -12,18 +12,14 @@ import sqlite3
 import requests
 from requests.exceptions import ConnectionError
 
-
 conn = sqlite3.connect('cryptocurrencies.db')
 c = conn.cursor()
-
-if False: # Don't run this statement unless you want to delete the table    
-    c.execute('DROP TABLE BTCUSD')
-    c.execute('''CREATE TABLE XXBTZUSD
-                  (date INT PRIMARY KEY,
-                  high REAL,
-                  low REAL,
-                  close REAL,
-                  volume REAL)''')
+c.execute('''CREATE TABLE IF NOT EXISTS BTCUSD
+              (date INT PRIMARY KEY,
+              high REAL,
+              low REAL,
+              close REAL,
+              volume REAL)''')
 
 url = 'https://api.kraken.com/0/public/OHLC?pair=XXBTZUSD'
 
