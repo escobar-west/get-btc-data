@@ -20,7 +20,6 @@ if False: # Don't run this statement unless you want to delete the table
     c.execute('DROP TABLE BTCUSD')
     c.execute('''CREATE TABLE XXBTZUSD
                   (date INT PRIMARY KEY,
-                  open REAL,
                   high REAL,
                   low REAL,
                   close REAL,
@@ -33,9 +32,9 @@ while(1):
         raw_data = requests.get(url)
         
         result = raw_data.json()['result']['XXBTZUSD'][:-1]
-        result_iter = ((row[0],row[1],row[2],row[3],row[4],row[6]) for row in result)
+        result_iter = ((row[0],row[2],row[3],row[4],row[6]) for row in result)
         
-        c.executemany('INSERT OR IGNORE INTO XXBTZUSD VALUES (?,?,?,?,?,?)', result_iter)
+        c.executemany('INSERT OR IGNORE INTO XXBTZUSD VALUES (?,?,?,?,?)', result_iter)
         conn.commit()
         
         print('{}: committed new entries. Now sleeping for an hour...'
