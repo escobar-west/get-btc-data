@@ -30,7 +30,7 @@ while(1):
         result = raw_data.json()['result']['XXBTZUSD'][:-1]
         result_iter = ((row[0],row[2],row[3],row[4],row[6]) for row in result)
         
-        c.executemany('INSERT OR IGNORE INTO XXBTZUSD VALUES (?,?,?,?,?)', result_iter)
+        c.executemany('INSERT OR IGNORE INTO BTCUSD VALUES (?,?,?,?,?)', result_iter)
         conn.commit()
         
         print('{}: committed new entries. Now sleeping for an hour...'
